@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Greetings!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+(function() {
+  emailjs.init("dcVn_9a8Q0kZW-4pM"); 
+})();
+</script>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Fredoka',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eaf6ff; 
+  overflow:hidden;
+}
+
+/* CARD */
+.card{
+  width:100%;
+  max-width:420px;
+  padding:40px 30px;
+  text-align:center;
+  display:none;
+  animation:fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.title{
+  font-size:22px;
+  font-weight:700;
+  color:#2c6e91;
+  margin-bottom:20px;
+}
+
+.subtitle{
+  font-size:16px;
+  color:#3f7fa6;
+  margin-bottom:20px;
+}
+
+/* BUTTONS */
+.btn{
+  padding:12px 28px;
+  border-radius:30px;
+  border:none;
+  background:#6ec1ff;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 6px 15px rgba(110,193,255,0.4);
+}
+
+.btn:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 10px 20px rgba(110,193,255,0.5);
+}
+
+.btn:active{
+  transform:scale(0.95);
+}
+
+/* PASSWORD */
+#passwordSection{
+  position:fixed;
+  inset:0;
+  background:#eaf6ff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.pass-title{
+  color: #2c6e91;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.pass-dots{
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  border:2px solid #6ec1ff;
+}
+
+.dot.filled{
+  background:#6ec1ff;
+}
+
+.keypad{
+  display:grid;
+  grid-template-columns:repeat(3,70px);
+  gap:12px;
+}
+
+.key{
+  background:#fff;
+  border-radius:15px;
+  padding:15px;
+  font-weight:bold;
+  color:#2c6e91;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+}
+
+.key:active{
+  transform:scale(0.9);
+}
+
+.clue{
+  margin-top:20px;
+  font-size:13px;
+  color:#3f7fa6;
+  opacity:0.8;
+}
+
+.pass-img {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+/* MUSIC BUTTON */
+.music-btn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  border:2px solid #6ec1ff;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:999;
+}
+
+/* VIDEO */
+video{
+  width:100%;
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+/* LETTER */
+#typedText{
+  text-align:left;
+  font-size:14px;
+  line-height:1.8;
+  color:#3f7fa6;
+  white-space:pre-wrap;
+  max-height:220px;
+  overflow-y:auto;
+  padding-left:15px;
+  border-left:4px solid #6ec1ff;
+}
+
+.cursor{
+  display:inline-block;
+  width:2px;
+  background:#880e4f;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0;}
+}
+
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  top:-20px;
+  font-size:20px;
+  animation:fall linear forwards;
+  pointer-events:none;
+  z-index:9999;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(100vh) rotate(360deg);
+  }
+}
+
+.yes-btn {
+  background:#f06292;
+}
+
+.no-btn {
+  background:#888;
+}
+
+.no-btn:hover {
+  background:#666;
+}
+
+/* BLUR EFFECT */
+.blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* POPUP MODAL */
+#datePopup {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.popup-box {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-box h3 {
+  color: #ad1457;
+  margin-bottom: 15px;
+}
+
+.popup-box p {
+  color: #880e4f;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ad1457;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<button class="music-btn" onclick="toggleMusic()">🎵</button>
+<audio id="bgMusic" loop>
+  <source src="cant.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PASSWORD -->
+<div id="passwordSection">
+  <img src="capoo1.gif" alt="lock" class="pass-img" />
+  <div class="pass-title">enter passcode to continue! </div>
+
+  <div class="pass-dots" id="dots">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <div class="keypad">
+    <div class="key" onclick="add(1)">1</div>
+    <div class="key" onclick="add(2)">2</div>
+    <div class="key" onclick="add(3)">3</div>
+    <div class="key" onclick="add(4)">4</div>
+    <div class="key" onclick="add(5)">5</div>
+    <div class="key" onclick="add(6)">6</div>
+    <div class="key" onclick="add(7)">7</div>
+    <div class="key" onclick="add(8)">8</div>
+    <div class="key" onclick="add(9)">9</div>
+    <div></div>
+    <div class="key" onclick="add(0)">0</div>
+    <div class="key" onclick="del()">⌫</div>
+  </div>
+
+  <div class="clue">clue: secret 📸</div>
+</div>
+
+  </div>
+</div>
+<!-- WELCOME -->
+<div class="card" id="welcome">
+<img
+    src="capoo2.gif"
+    id="welcomeGif"
+    alt="welcome"
+    style="width: 180px; display: block; margin: 0 auto 20px"
+/>   
+  <div class="title">Hi, Kuya Jeroen!</div>
+  <button class="btn" onclick="show('ready')">tap hereee</button>
+</div>
+
+<!-- READY -->
+<div class="card" id="ready">
+<img
+    src="capoo3.gif"
+    id="welcomeGif"
+    alt="welcome"
+    style="width: 180px; display: block; margin: 0 auto 20px"
+/>  
+  <div class="title">are you ready to open this? 👀</div>
+  <button class="btn" onclick="show('valentine')">yesss</button>
+</div>
+
+<!-- VALENTINE -->
+<div class="card" id="valentine">
+<img
+    src="capoo4.gif"
+    id="welcomeGif"
+    alt="welcome"
+    style="width: 180px; display: block; margin: 0 auto 20px"
+/>  
+  <div class="title">Today is your birthday! 💌</div>
+  <div class="subtitle">I have something for you...</div>
+  <button class="btn" onclick="showLetter()">letter</button>
+</div>
+
+<!-- VIDEO 
+<div class="card" id="videoPage">
+  <video controls>
+    <source src="daisy.mp4" type="video/mp4">
+  </video>
+  <div class="subtitle">na</div>
+  <button class="btn" onclick="showLetter()">letter</button>
+</div> -->
+
+<!-- LETTER -->
+<div class="card" id="letterPage">
+  <div class="title">To Kuya Jeroen!</div>
+  <div id="typedText"></div>
+  <button class="btn" onclick="partyPop()" id="nextBtn" style="display:none;margin-top:15px;">🎉 Party Poppers</button>
+</div>
+
+<script>
+let input="";
+const correct="123456";
+
+function add(num){
+  if(input.length<6){
+    input+=num;
+    updateDots();
+    if(input.length===6) check();
+  }
+}
+function del(){
+  input=input.slice(0,-1);
+  updateDots();
+}
+function updateDots(){
+  const dots=document.querySelectorAll('.dot');
+  dots.forEach((d,i)=>d.classList.toggle('filled',i<input.length));
+}
+function check(){
+  if(input===correct){
+    document.getElementById('passwordSection').style.display="none";
+    
+    // AUTO PLAY MUSIC
+    const music = document.getElementById("bgMusic");
+    music.play().catch(() => {});
+
+    show('welcome');
+  }else{
+    input="";
+    updateDots();
+    alert("wrong password 😝");
+  }
+}
+function show(id){
+  document.querySelectorAll('.card').forEach(c=>c.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+function showLetter(){
+  show('letterPage');
+  typeWriter();
+}
+
+function typeWriter(){
+  const text=`To Kuya Jeroen.
+
+So yesss, hello kuya, I really wanted to greet you a 
+happy birthday and also say how thankful I am for you.
+
+Kuya Jeroen, thank you for always being someone I can rely on.
+Thank you for guiding me whenever I feel unsure about things.
+Thank you for always checking on me and asking how I’m doing.
+Those small moments when you ask if I’m okay truly mean a lot to me.
+
+You’ve helped me more than you probably realize.
+Sometimes just knowing that someone cares enough to check in already makes things feel lighter.
+You’ve been someone who brings comfort, reassurance, and happiness when I need it the most.
+And I’m really grateful for that.
+
+I appreciate the way you look out for me.
+The way you remind me that things will be okay.
+The way you make me feel supported even in simple conversations.
+You’ve been a good kuya to me, and I’m thankful for your presence in my life.
+
+Today is your special day, and I truly hope it brings you happiness, peace, and all the blessings you deserve.
+You work hard and care for the people around you, and I hope life continues to reward you with good things.
+
+From my family and me, we also want to send you our warm greetings and thanks.
+We’re grateful for you and for the kindness you’ve shown, and we hope you and your loved ones continue to 
+be blessed with good health, happiness, and many more blessings.
+
+Enjoy your birthday today with Kuya Mikko.
+Celebrate, laugh, and make the most of your day together.
+Hopefully someday soon I’ll get the chance to join you both and celebrate together too.
+
+Happy Birthday again, Kuya Jeroen.
+Thank you for everything you’ve done for me.
+I truly appreciate you.
+
+- Mel`
+;
+
+  const el=document.getElementById("typedText");
+  let i=0;
+  const cursor=document.createElement("span");
+  cursor.className="cursor";
+  el.appendChild(cursor);
+
+  function type(){
+    if(i<text.length){
+      cursor.insertAdjacentText("beforebegin",text.charAt(i));
+      i++;
+      el.scrollTop=el.scrollHeight;
+      setTimeout(type,70);
+    }else{
+      document.getElementById("nextBtn").style.display="inline-block";
+    }
+  }
+  type();
+}
+
+/* CONFETTI */
+let confettiRunning = false;
+
+function startConfetti(){
+
+  if(confettiRunning) return; // prevent multiple loops
+  confettiRunning = true;
+
+  const symbols = ["🎉","🎊","🍻","🍾","🥂","🍺","✨"];
+
+  setInterval(()=>{
+
+    const conf=document.createElement("div");
+    conf.className="confetti";
+    conf.innerText=symbols[Math.floor(Math.random()*symbols.length)];
+
+    conf.style.left=Math.random()*100+"vw";
+
+    // different falling speeds
+    const speed = Math.random();
+
+    if(speed < 0.33){
+      conf.style.animationDuration = "7s"; // slow
+      conf.style.fontSize = "26px";
+    }
+    else if(speed < 0.66){
+      conf.style.animationDuration = "4s"; // moderate
+      conf.style.fontSize = "22px";
+    }
+    else{
+      conf.style.animationDuration = "2.5s"; // fast
+      conf.style.fontSize = "20px";
+    }
+
+    document.body.appendChild(conf);
+
+    setTimeout(()=>{
+      conf.remove();
+    },8000);
+
+  },120); // spawn rate (lower = more confetti)
+
+}
+
+function partyPop(){
+  startConfetti();
+}
+
+/* FINAL PAGE CONTROL */
+let finalStarted = false;
+let yesClicked = false;
+
+/* SHOW FINAL PAGE */
+function showFinalPage(){
+  show('finalPage');
+
+  if(!finalStarted){
+    finalStarted = true;
+    typeFinalQuestion();
+  }
+}
+
+function toggleMusic(){
+  const music=document.getElementById("bgMusic");
+  music.paused?music.play():music.pause();
+}
+
+function closePopup(){
+  document.getElementById("lunchPopup").style.display = "none";
+}
+
+function openReply(){
+  document.getElementById("replyModal").style.display="flex";
+}
+
+function closeReply(){
+  document.getElementById("replyModal").style.display="none";
+}
+
+</script>
+
+</body>
+</html>
